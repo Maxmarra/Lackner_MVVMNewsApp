@@ -5,3 +5,4 @@ data class NewsResponse(
     val status: String,
     val totalResults: Int
 )
+
