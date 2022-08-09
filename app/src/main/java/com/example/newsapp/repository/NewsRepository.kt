@@ -18,6 +18,6 @@ class NewsRepository(val db: ArticleDatabase) {
             )
     }
 
-    suspend fun searchForNews(searchQuery: String, pageNumber: Int)
+    suspend fun searchNews(searchQuery: String, pageNumber: Int)
         = RetrofitInstance.api.searchForNews(searchQuery, pageNumber)
 }
