@@ -34,6 +34,10 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
         var job: Job? = null
         //у EditText есть поле addTextChangedListener
         etSearch.addTextChangedListener { searchFieldText ->
+            //каждый раз когда мы начинаем печатать очередную букву
+            //мы отменяем запрос
+            //а потом снова его начинаем job = MainScope().launch {...
+            //когда начинаем печатать следующую букву
             job?.cancel()
             //Задействуем тут корутину только из-за того чтобы сделать
             // 0,5 сек задержку при набивании поисковой фразы
