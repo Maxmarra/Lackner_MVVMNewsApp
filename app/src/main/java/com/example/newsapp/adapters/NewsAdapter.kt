@@ -26,7 +26,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
         }
     }
 
-    //при ListAdapter differ будет не нужен!
+    //при ListAdapter differ будет не нужен! или нет? посмотри SavedNewsFragment
     val differ = AsyncListDiffer(this, differCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
