@@ -11,7 +11,7 @@ class Converters {
     //говорим Room откуда взять понятный
     //ему формат например String у name
     @TypeConverter
-    fun fromSource(source: Source): String {
+    fun fromSource(source: Source): String? {
         return source.name
     }
 
