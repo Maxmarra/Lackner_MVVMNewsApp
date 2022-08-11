@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">News App</string>
+    <string name="app_name">Последние новости</string>
+    <string name="toast_artilce_added">Статья добавлена в \'Понравилось\'</string>
+    <string name="resource_error_with_message">Произошла ошибка %s</string>
 </resources>

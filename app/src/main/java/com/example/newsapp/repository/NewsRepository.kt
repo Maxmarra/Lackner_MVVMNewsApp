@@ -18,10 +18,10 @@ class NewsRepository(val db: ArticleDatabase) {
     // его значение уже указано в NewsApi!
     // все что там уже стоит по умолчанию
     // передавать не надо!!!
-    suspend fun getBreakingNews(countryCode: String, pageNumber: Int)
+    suspend fun getBreakingNews(pageNumber: Int)
         : Response<NewsResponse> {
             return RetrofitInstance.api.getBreakingNews(
-                countryCode, pageNumber
+                pageNumber = pageNumber
             )
     }
     suspend fun searchNews(searchQuery: String, pageNumber: Int)

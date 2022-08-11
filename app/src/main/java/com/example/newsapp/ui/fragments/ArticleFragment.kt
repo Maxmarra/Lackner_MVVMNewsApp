@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_article.*
 class ArticleFragment : Fragment(R.layout.fragment_article) {
 
     lateinit var viewModel:NewsViewModel
-    val args: ArticleFragmentArgs by navArgs()
+    private val args: ArticleFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,7 +33,7 @@ class ArticleFragment : Fragment(R.layout.fragment_article) {
             viewModel.saveArticle(article)
             Snackbar.make(
                 view,
-                "Article saved successfully",
+                getString(R.string.toast_artilce_added),
                 Snackbar.LENGTH_SHORT)
                 .show()
         }

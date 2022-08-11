@@ -38,11 +38,11 @@ class NewsViewModel(
 
 
     init {
-        getBreakingNews("ru")
+        getBreakingNews()
     }
 
-    fun getBreakingNews(countryCode: String) = viewModelScope.launch {
-        safeBreakingNewsCall(countryCode)
+    fun getBreakingNews() = viewModelScope.launch {
+        safeBreakingNewsCall()
     }
 
     fun searchNews(searchQuery: String) = viewModelScope.launch {
@@ -116,11 +116,11 @@ class NewsViewModel(
         }
     }
 
-    private suspend fun safeBreakingNewsCall(countryCode: String) {
+    private suspend fun safeBreakingNewsCall() {
         breakingNews.postValue(Resource.Loading())
         try {
             if(hasInternetConnection()) {
-                val response = newsRepository.getBreakingNews(countryCode, breakingNewsPage)
+                val response = newsRepository.getBreakingNews(pageNumber = breakingNewsPage)
                 breakingNews.postValue(handleBreakingNewsResponse(response))
             } else {
                 breakingNews.postValue(Resource.Error(message = "No internet connection"))

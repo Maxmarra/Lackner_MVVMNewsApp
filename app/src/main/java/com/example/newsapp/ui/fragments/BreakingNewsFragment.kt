@@ -1,7 +1,6 @@
 package com.example.newsapp.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AbsListView
 import android.widget.Toast
@@ -65,7 +64,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                     hideProgressBar()
                     response.message?.let { message ->
                         //Log.e(TAG, "An error occured: $message")
-                        Toast.makeText(activity, "An error occured: $message", Toast.LENGTH_LONG).show()
+                        Toast.makeText(activity, getString(R.string.resource_error_with_message, message), Toast.LENGTH_LONG).show()
                         showErrorMessage(message)
                     }
                 }
@@ -76,7 +75,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
         })
 
         btnRetry.setOnClickListener {
-            viewModel.getBreakingNews("ru")
+            viewModel.getBreakingNews()
         }
     }
 
@@ -131,7 +130,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                         && isTotalMoreThanVisible
                         && isScrolling
             if(shouldPaginate) {
-                viewModel.getBreakingNews("ru")
+                viewModel.getBreakingNews()
                 isScrolling = false
             }
         }
