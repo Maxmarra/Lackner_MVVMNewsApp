@@ -21,6 +21,7 @@ import com.example.newsapp.util.Resource
 import kotlinx.android.synthetic.main.fragment_breaking_news.*
 import kotlinx.android.synthetic.main.fragment_search_news.*
 import kotlinx.android.synthetic.main.fragment_search_news.paginationProgressBar
+import kotlinx.android.synthetic.main.item_error_message.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -75,6 +76,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
             when(response) {
                 is Resource.Success -> {
                     hideProgressBar()
+                    hideErrorMessage()
                     response.data?.let { newsResponse ->
                         newsAdapter.differ.submitList(newsResponse.articles.toList())
                         val totalPages = newsResponse.totalResults / Constants.QUERY_PAGE_SIZE + 2
@@ -95,6 +97,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
                     response.message?.let { message ->
                         //Log.e(TAG, "An error occured: $message")
                         Toast.makeText(activity, "An error occured: $message", Toast.LENGTH_LONG).show()
+                        showErrorMessage(message)
                     }
                 }
                 is Resource.Loading -> {
@@ -102,6 +105,15 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
                 }
             }
         })
+
+        btnRetry.setOnClickListener {
+            if (etSearch.text.toString().isNotEmpty()) {
+                viewModel.searchNews(etSearch.text.toString())
+            } else {
+                hideErrorMessage()
+            }
+        }
+
     }
     private fun hideProgressBar() {
         paginationProgressBar.visibility = View.INVISIBLE
@@ -113,6 +125,18 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
         isLoading = true
     }
 
+    private fun hideErrorMessage() {
+        itemErrorMessageSearch.visibility = View.INVISIBLE
+        isError = false
+    }
+
+    private fun showErrorMessage(message: String) {
+        itemErrorMessageSearch.visibility = View.VISIBLE
+        tvErrorMessage.text = message
+        isError = true
+    }
+
+    var isError = false
     var isLoading = false
     var isLastPage = false
     var isScrolling = false

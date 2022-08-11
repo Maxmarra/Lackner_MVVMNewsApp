@@ -45,6 +45,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
             when(response) {
                 is Resource.Success -> {
                     hideProgressBar()
+                    hideErrorMessage()
                     response.data?.let { newsResponse ->
                         newsAdapter.differ.submitList(newsResponse.articles.toList())
 
@@ -65,7 +66,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                     response.message?.let { message ->
                         //Log.e(TAG, "An error occured: $message")
                         Toast.makeText(activity, "An error occured: $message", Toast.LENGTH_LONG).show()
-                        //showErrorMessage(message)
+                        showErrorMessage(message)
                     }
                 }
                 is Resource.Loading -> {
@@ -73,6 +74,10 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                 }
             }
         })
+
+        btnRetry.setOnClickListener {
+            viewModel.getBreakingNews("ru")
+        }
     }
 
     private fun hideProgressBar() {
@@ -85,16 +90,16 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
         isLoading = true
     }
 
-//    private fun hideErrorMessage() {
-//        itemErrorMessage.visibility = View.INVISIBLE
-//        isError = false
-//    }
-//
-//    private fun showErrorMessage(message: String) {
-//        itemErrorMessage.visibility = View.VISIBLE
-//        tvErrorMessage.text = message
-//        isError = true
-//    }
+    private fun hideErrorMessage() {
+        itemErrorMessage.visibility = View.INVISIBLE
+        isError = false
+    }
+
+    private fun showErrorMessage(message: String) {
+        itemErrorMessage.visibility = View.VISIBLE
+        tvErrorMessage.text = message
+        isError = true
+    }
 
     var isError = false
     var isLoading = false
