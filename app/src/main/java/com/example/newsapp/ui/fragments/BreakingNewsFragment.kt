@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AbsListView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,7 @@ import com.example.newsapp.ui.NewsViewModel
 import com.example.newsapp.util.Constants.Companion.QUERY_PAGE_SIZE
 import com.example.newsapp.util.Resource
 import kotlinx.android.synthetic.main.fragment_breaking_news.*
+import kotlinx.android.synthetic.main.item_error_message.*
 
 class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
 
@@ -61,7 +63,9 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                 is Resource.Error -> {
                     hideProgressBar()
                     response.message?.let { message ->
-                        Log.e(TAG, "An error occured: $message")
+                        //Log.e(TAG, "An error occured: $message")
+                        Toast.makeText(activity, "An error occured: $message", Toast.LENGTH_LONG).show()
+                        //showErrorMessage(message)
                     }
                 }
                 is Resource.Loading -> {
@@ -81,6 +85,18 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
         isLoading = true
     }
 
+//    private fun hideErrorMessage() {
+//        itemErrorMessage.visibility = View.INVISIBLE
+//        isError = false
+//    }
+//
+//    private fun showErrorMessage(message: String) {
+//        itemErrorMessage.visibility = View.VISIBLE
+//        tvErrorMessage.text = message
+//        isError = true
+//    }
+
+    var isError = false
     var isLoading = false
     var isLastPage = false
     var isScrolling = false
