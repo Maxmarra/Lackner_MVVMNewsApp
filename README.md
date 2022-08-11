@@ -13,3 +13,4 @@ News App with MVVM architecture and following features:
 - coroutines and jobs
 - swipe to delete functionality
 - pagination
+- checking internet connection
