@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapp.R
+import com.example.newsapp.adapters.ArticleListener
 import com.example.newsapp.adapters.NewsAdapter
 import com.example.newsapp.ui.NewsActivity
 import com.example.newsapp.ui.NewsViewModel
@@ -27,18 +28,12 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewModel = (activity as NewsActivity).viewModel
+
         setupRecyclerView()
 
-        newsAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("article", it)
-            }
-            findNavController().navigate(
-                R.id.action_breakingNewsFragment_to_articleFragment,
-                bundle
-            )
-        }
+        viewModel.getBreakingNews()
 
         viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
             when(response) {
@@ -46,7 +41,8 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                     hideProgressBar()
                     hideErrorMessage()
                     response.data?.let { newsResponse ->
-                        newsAdapter.differ.submitList(newsResponse.articles.toList())
+
+                        newsAdapter.submitList(newsResponse.articles.toList())
 
                         val totalPages = newsResponse.totalResults / QUERY_PAGE_SIZE + 2
                         isLastPage = viewModel.breakingNewsPage == totalPages
@@ -144,7 +140,17 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
     }
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsAdapter()
+        newsAdapter = NewsAdapter(
+            ArticleListener {
+                val bundle = Bundle().apply {
+                    putSerializable("article", it)
+                }
+                findNavController().navigate(
+                    R.id.action_breakingNewsFragment_to_articleFragment,
+                    bundle
+                )
+            }
+        )
         rvBreakingNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapp.R
+import com.example.newsapp.adapters.ArticleListener
 import com.example.newsapp.adapters.NewsAdapter
 import com.example.newsapp.ui.NewsActivity
 import com.example.newsapp.ui.NewsViewModel
@@ -27,15 +28,6 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
         viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
 
-        newsAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("article", it)
-            }
-            findNavController().navigate(
-                R.id.action_savedNewsFragment_to_articleFragment,
-                bundle
-            )
-        }
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
@@ -54,7 +46,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
                 direction: Int) {
 
                 val position = viewHolder.adapterPosition
-                val article = newsAdapter.differ.currentList[position]
+                val article = newsAdapter.currentList[position]
 
                 viewModel.deleteArticle(article)
 
@@ -76,20 +68,25 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
             attachToRecyclerView(rvSavedNews)
         }
 
-
-
-
-
-
-
-
         viewModel.getSavedNews().observe(viewLifecycleOwner, Observer { articles ->
-            newsAdapter.differ.submitList(articles)
+            newsAdapter.submitList(articles)
         })
     }
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsAdapter()
+        newsAdapter = NewsAdapter(
+            ArticleListener {
+                val bundle = Bundle().apply {
+                    putSerializable("article", it)
+                }
+                findNavController().navigate(
+                    R.id.action_savedNewsFragment_to_articleFragment,
+                    bundle
+                )
+            }
+
+
+        )
         rvSavedNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)

@@ -37,9 +37,9 @@ class NewsViewModel(
     var oldSearchQuery:String? = null
 
 
-    init {
-        getBreakingNews()
-    }
+//    init {
+//        getBreakingNews()
+//    }
 
     fun getBreakingNews() = viewModelScope.launch {
         safeBreakingNewsCall()
